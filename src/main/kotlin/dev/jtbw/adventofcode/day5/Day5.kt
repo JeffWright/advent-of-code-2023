@@ -4,6 +4,7 @@ import dev.jtbw.adventofcode.AoCDay
 import dev.jtbw.adventofcode.Parser
 import dev.jtbw.adventofcode.parseInput
 import dev.jtbw.adventofcode.run
+import dev.jtbw.adventofcode.util.splitWhitespace
 import dev.jtbw.adventofcode.util.toLongs
 import dev.jtbw.logsugar.inspect
 import dev.jtbw.logsugar.log
@@ -33,7 +34,7 @@ object Day5 : AoCDay<Day5.Input> {
                     ConcreteMapping.parse(
                         // First line is "x-to-y map:"
                         description = section.first(),
-                        lines = section.drop(1).map { it.toLongs() })
+                        lines = section.drop(1).map { it.splitWhitespace().toLongs() })
                   }
           Input(seeds, maps)
         }
