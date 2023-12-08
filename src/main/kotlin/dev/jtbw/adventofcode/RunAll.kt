@@ -7,6 +7,7 @@ import dev.jtbw.adventofcode.day4.Day4
 import dev.jtbw.adventofcode.day5.Day5
 import dev.jtbw.adventofcode.day6.Day6
 import dev.jtbw.adventofcode.day7.Day7
+import dev.jtbw.adventofcode.day8.Day8
 
 fun main() {
   listOf(
@@ -17,6 +18,7 @@ fun main() {
           Day5,
           Day6,
           Day7,
+          Day8,
       )
       .forEach { it.run() }
 }

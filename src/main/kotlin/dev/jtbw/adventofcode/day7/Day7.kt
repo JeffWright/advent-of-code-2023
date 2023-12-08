@@ -45,8 +45,8 @@ object Day7 : AoCDay<List<Day7.Hand>> {
       val cardsNoJokers = cards.filterNot { it == Card.J }
       val cardsMapNoJokers = cardsNoJokers.groupBy { it }
       val numJokers = cards.count { it == Card.J }
-          val mostCommonNonJoker = cardsMapNoJokers.maxByOrNull { it.value.size }?.key ?: Card.J
-          return typeWithoutJokers(cardsNoJokers + (listOf(mostCommonNonJoker) * numJokers))
+      val mostCommonNonJoker = cardsMapNoJokers.maxByOrNull { it.value.size }?.key ?: Card.J
+      return typeWithoutJokers(cardsNoJokers + (listOf(mostCommonNonJoker) * numJokers))
     }
   }
 
@@ -93,9 +93,7 @@ object Day7 : AoCDay<List<Day7.Hand>> {
   private val typeComparator = compareBy<Hand> { it.type }
 
   class TieBreakComparator(val jokers: Boolean) : Comparator<Hand> {
-    private val cardComparator = compareBy<Card> {
-      if (jokers && it == Card.J) -1 else it.ordinal
-    }
+    private val cardComparator = compareBy<Card> { if (jokers && it == Card.J) -1 else it.ordinal }
 
     override fun compare(a: Hand, b: Hand): Int {
       (0 ..< 5).forEach {

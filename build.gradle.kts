@@ -17,6 +17,9 @@ repositories {
 dependencies {
     implementation("com.github.JeffWright:scriptutils:0.7.4")
     implementation("com.github.JeffWright:logsugar:0.5.0")
+
+    testImplementation(kotlin("test"))
+
 }
 
 tasks.withType<KotlinCompile> {
