@@ -14,7 +14,9 @@ fun <T> List<List<T>>.inBounds(x: Int, y: Int): Boolean {
 
 fun <T> List<T>.inBounds(i: Int): Boolean = i in indices
 
-fun List<String>.toLongs(): List<Long> = map { it.toLong() }
+fun Iterable<String>.toLongs(): List<Long> = map { it.toLong() }
+
+fun Iterable<String>.toInts(): List<Int> = map { it.toInt() }
 
 fun String.splitWhitespace() = split(Regex("""\s+"""))
 
