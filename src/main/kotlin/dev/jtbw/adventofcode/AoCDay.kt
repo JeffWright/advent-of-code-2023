@@ -1,6 +1,8 @@
 package dev.jtbw.adventofcode
 
 import dev.jtbw.adventofcode.util.InputReader
+import dev.jtbw.logsugar.LogSugar
+import dev.jtbw.logsugar.inspect
 import dev.jtbw.logsugar.log
 import dev.jtbw.logsugar.logDivider
 
@@ -24,6 +26,8 @@ fun <INPUT> AoCDay<INPUT>.parseInput(
 class Parser<T>(val fn: (List<String>) -> T)
 
 fun <INPUT> AoCDay<INPUT>.run() {
+  LogSugar.configure(useColors = true)
+
   val day = this
   logDivider("AoC: ${day.javaClass.simpleName}")
   logDivider("Tests", weight = 5)

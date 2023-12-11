@@ -1,6 +1,5 @@
-import dev.jtbw.adventofcode.util.leastCommonMultiple
-import dev.jtbw.adventofcode.util.primeFactorization
-import dev.jtbw.adventofcode.util.primes
+package dev.jtbw.adventofcode.util
+
 import dev.jtbw.logsugar.inspect
 import dev.jtbw.scriptutils.shouldBe
 import kotlin.test.Test
