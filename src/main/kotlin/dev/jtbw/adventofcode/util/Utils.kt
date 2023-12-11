@@ -2,25 +2,6 @@ package dev.jtbw.adventofcode.util
 
 import dev.jtbw.scriptutils.shouldBe
 
-operator fun <T> List<List<T>>.get(x: Int, y: Int) = this[y][x]
-
-operator fun <T> List<List<T>>.get(offset: Offset) = this[offset.y][offset.x]
-
-operator fun <T> List<MutableList<T>>.set(x: Int, y: Int, v: T) {
-  this[y][x] = v
-}
-
-operator fun <T> List<MutableList<T>>.set(offset: Offset, v: T) {
-  this[offset.y][offset.x] = v
-}
-
-fun <T> List<List<T>>.inBounds(x: Int, y: Int): Boolean {
-  return y in indices && x in this[y].indices
-}
-
-fun <T> List<List<T>>.inBounds(offset: Offset): Boolean = inBounds(offset.x, offset.y)
-
-fun <T> List<T>.inBounds(i: Int): Boolean = i in indices
 
 fun Iterable<String>.toLongs(): List<Long> = map { it.toLong() }
 
@@ -39,13 +20,17 @@ fun <T> Sequence<T>.repeatForever(): Sequence<T> {
   }
 }
 
+/** Same as this..other or other..this, depending on which is larger */
+fun Int.ascendingRangeTo(other: Int) =
+if(other > this) {
+  this..other
+} else {
+  other..this
+}
+
 fun <T> List<T>.countOf(item: T): Int {
   return count { it == item }
 }
-
-typealias Grid<T> = List<List<T>>
-
-typealias MutableGrid<T> = List<MutableList<T>>
 
 fun main() {
   "one, two  ,  three,    four    ,five".splitCommas() shouldBe

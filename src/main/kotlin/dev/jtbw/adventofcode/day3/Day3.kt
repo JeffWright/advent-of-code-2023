@@ -4,13 +4,17 @@ import dev.jtbw.adventofcode.AoCDay
 import dev.jtbw.adventofcode.Parser
 import dev.jtbw.adventofcode.parseInput
 import dev.jtbw.adventofcode.run
-import dev.jtbw.adventofcode.util.Direction
-import dev.jtbw.adventofcode.util.Offset
-import dev.jtbw.adventofcode.util.get
-import dev.jtbw.adventofcode.util.inBounds
-import dev.jtbw.adventofcode.util.offset
-import dev.jtbw.adventofcode.util.plus
-import dev.jtbw.adventofcode.util.set
+import dev.jtbw.adventofcode.util.twodeespace.Direction
+import dev.jtbw.adventofcode.util.twodeespace.Grid
+import dev.jtbw.adventofcode.util.twodeespace.MutableGrid
+import dev.jtbw.adventofcode.util.twodeespace.Offset
+import dev.jtbw.adventofcode.util.twodeespace.get
+import dev.jtbw.adventofcode.util.twodeespace.height
+import dev.jtbw.adventofcode.util.twodeespace.inBounds
+import dev.jtbw.adventofcode.util.twodeespace.offset
+import dev.jtbw.adventofcode.util.twodeespace.plus
+import dev.jtbw.adventofcode.util.twodeespace.set
+import dev.jtbw.adventofcode.util.twodeespace.width
 import dev.jtbw.logsugar.inspect
 import dev.jtbw.logsugar.log
 import dev.jtbw.scriptutils.shouldBe
@@ -19,7 +23,7 @@ fun main() = Day3.run()
 
 object Day3 : AoCDay<GridWithMeta> {
   override val parser = Parser { lines ->
-    val grid: Grid = lines.map { it.toCharArray().toList() }
+    val grid: Grid<Char> = lines.map { it.toCharArray().toList() }
     GridWithMeta(
         grid = grid,
         consumed = (0..(grid.height)).map { (0..grid.width).map { false }.toMutableList() })
@@ -106,22 +110,17 @@ private fun List<MutableList<Boolean>>.reset() {
   forEach { row -> row.indices.forEach { row[it] = false } }
 }
 
-typealias Grid = List<List<Char>>
+//typealias Grid = List<List<Char>>
 
 data class GridWithMeta(
-    val grid: Grid,
-    val consumed: List<MutableList<Boolean>>,
+    val grid: Grid<Char>,
+    val consumed: MutableGrid<Boolean>,
 )
 
 private val Char.isSymbol: Boolean
   get() {
     return this != '.' && !this.isDigit()
   }
-val Grid.width
-  get() = this[0].size
-val Grid.height
-  get() = this.size
-
 fun GridWithMeta.consume(x: Int, y: Int): Int? {
   // log("consume $x, $y")
 

@@ -1,7 +1,7 @@
-package dev.jtbw.adventofcode.util
+package dev.jtbw.adventofcode.util.twodeespace
 
-import dev.jtbw.adventofcode.util.Direction.Diagonal.*
-import dev.jtbw.adventofcode.util.Direction.Orthogonal.*
+import dev.jtbw.adventofcode.util.twodeespace.Direction.Diagonal.*
+import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.*
 
 sealed interface Direction {
   sealed interface Orthogonal : Direction {
@@ -34,19 +34,6 @@ val Direction.Orthogonal.opposite: Direction.Orthogonal
         UP -> DOWN
       }
 
-data class Offset(val x: Int, val y: Int) {
-  override fun toString(): String {
-    return "($x, $y)"
-  }
-}
-
-operator fun Offset.plus(other: Offset): Offset {
-  return Offset(x + other.x, y + other.y)
-}
-
-operator fun Offset.minus(other: Offset): Offset {
-  return Offset(x - other.x, y - other.y)
-}
 
 val Direction.offset: Offset
   get() {
@@ -61,12 +48,6 @@ val Direction.offset: Offset
       UPRIGHT -> Offset(1, -1)
     }
   }
-
-operator fun Offset.plus(direction: Direction) = plus(direction.offset)
-
-fun Offset.toOrthogonal() = Direction.orthogonals.first { it.offset == this }
-
-fun Offset.toDirection() = Direction.all.first { it.offset == this }
 
 fun Direction.Orthogonal.rotateLeft() =
     when (this) {

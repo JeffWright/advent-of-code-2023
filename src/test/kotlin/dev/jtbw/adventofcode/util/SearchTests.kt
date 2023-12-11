@@ -2,7 +2,9 @@ package dev.jtbw.adventofcode.util
 
 import dev.jtbw.adventofcode.util.SearchStrategy.*
 import dev.jtbw.adventofcode.util.ShouldContinue.*
-import dev.jtbw.adventofcode.util.plus
+import dev.jtbw.adventofcode.util.twodeespace.Direction
+import dev.jtbw.adventofcode.util.twodeespace.Offset
+import dev.jtbw.adventofcode.util.twodeespace.plus
 import dev.jtbw.logsugar.log
 import dev.jtbw.logsugar.logDivider
 import dev.jtbw.scriptutils.shouldBe
