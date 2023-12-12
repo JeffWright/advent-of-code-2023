@@ -2,6 +2,8 @@ package dev.jtbw.adventofcode
 
 import dev.jtbw.adventofcode.day1.Day1
 import dev.jtbw.adventofcode.day10.Day10
+import dev.jtbw.adventofcode.day11.Day11
+import dev.jtbw.adventofcode.day12.Day12
 import dev.jtbw.adventofcode.day2.Day2
 import dev.jtbw.adventofcode.day3.Day3
 import dev.jtbw.adventofcode.day4.Day4
@@ -23,6 +25,8 @@ fun main() {
     Day8,
     Day9,
     Day10,
+    Day11,
+    Day12,
   )
     .forEach { it.run() }
 }
