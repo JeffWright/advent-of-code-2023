@@ -18,10 +18,10 @@ object Day8 : AoCDay<Day8.Input> {
   override val parser = Parser { lines ->
     val instructions = lines.first()
     val map =
-        lines.drop(2).associate {
-          val (key, left, right) = it.matchGroups(Regex("""(\S+) = \((\S+), (\S+)\)"""))
-          key to (left to right)
-        }
+      lines.drop(2).associate {
+        val (key, left, right) = it.matchGroups(Regex("""(\S+) = \((\S+), (\S+)\)"""))
+        key to (left to right)
+      }
 
     Input(instructions, map)
   }
@@ -32,15 +32,15 @@ object Day8 : AoCDay<Day8.Input> {
 
     var current = "AAA"
     val steps =
-        instructions
-            .asSequence()
-            .repeatForever()
-            .withIndex()
-            .first { (_, lr) ->
-              current = current.move(map, lr)
-              current == "ZZZ"
-            }
-            .index + 1
+      instructions
+        .asSequence()
+        .repeatForever()
+        .withIndex()
+        .first { (_, lr) ->
+          current = current.move(map, lr)
+          current == "ZZZ"
+        }
+        .index + 1
 
     steps.inspect().shouldBe(CORRECT)
   }
@@ -51,18 +51,18 @@ object Day8 : AoCDay<Day8.Input> {
     val startingLocations = map.keys.filter { it.endsWith("A") }
 
     val cycleLengths =
-        startingLocations.map { start ->
-          var current = start
-          instructions
-              .asSequence()
-              .repeatForever()
-              .withIndex()
-              .first { (_, lr) ->
-                current = current.move(map, lr)
-                current.endsWith("Z")
-              }
-              .index + 1
-        }
+      startingLocations.map { start ->
+        var current = start
+        instructions
+          .asSequence()
+          .repeatForever()
+          .withIndex()
+          .first { (_, lr) ->
+            current = current.move(map, lr)
+            current.endsWith("Z")
+          }
+          .index + 1
+      }
 
     cycleLengths shouldBe listOf(18961, 12169, 17263, 13301, 14999, 16697)
     val answer = cycleLengths.leastCommonMultiple()

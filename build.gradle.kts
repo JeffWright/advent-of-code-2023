@@ -17,11 +17,15 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.JeffWright:scriptutils:0.7.4")
+    implementation("com.github.JeffWright:scriptutils:0.7.5")
     implementation("com.github.JeffWright:logsugar:0.5.1")
 
     testImplementation(kotlin("test"))
 
+}
+
+ktfmt {
+    googleStyle() // 2-space indentation
 }
 
 tasks.withType<KotlinCompile> {

@@ -35,9 +35,9 @@ fun List<Int>.leastCommonMultiple(): Long {
   val nums = this
   val primeFactors = nums.map { primeFactorization(it) }
   val primeFactorsWithMaxCounts =
-      primeFactors.flatten().distinct().map { factor ->
-        factor to primeFactors.maxOf { it.countOf(factor) }
-      }
+    primeFactors.flatten().distinct().map { factor ->
+      factor to primeFactors.maxOf { it.countOf(factor) }
+    }
 
   return primeFactorsWithMaxCounts.fold(1L) { product, (factor, maxCount) ->
     product * factor.toDouble().pow(maxCount.toDouble()).toLong()

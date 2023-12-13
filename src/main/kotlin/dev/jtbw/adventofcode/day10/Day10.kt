@@ -5,15 +5,15 @@ import dev.jtbw.adventofcode.Parser
 import dev.jtbw.adventofcode.day10.Space.*
 import dev.jtbw.adventofcode.parseInput
 import dev.jtbw.adventofcode.run
-import dev.jtbw.adventofcode.util.twodeespace.Direction.Companion.orthogonals
-import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal
-import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.*
-import dev.jtbw.adventofcode.util.twodeespace.Offset
 import dev.jtbw.adventofcode.util.SearchStrategy.BREADTH_FIRST
 import dev.jtbw.adventofcode.util.SearchStrategy.DEPTH_FIRST
 import dev.jtbw.adventofcode.util.ShouldContinue.CONTINUE
 import dev.jtbw.adventofcode.util.graphSearch
+import dev.jtbw.adventofcode.util.twodeespace.Direction.Companion.orthogonals
+import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal
+import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.*
 import dev.jtbw.adventofcode.util.twodeespace.Grid
+import dev.jtbw.adventofcode.util.twodeespace.Offset
 import dev.jtbw.adventofcode.util.twodeespace.get
 import dev.jtbw.adventofcode.util.twodeespace.inBounds
 import dev.jtbw.adventofcode.util.twodeespace.minus
@@ -43,6 +43,8 @@ sealed interface Space {
 object Day10 : AoCDay<Grid<Space>> {
   override val parser = Parser { lines -> lines.map { line -> line.map { it.toSpace() } } }
 
+  private const val PRETTY_PRINT = false
+
   override fun part1() {
     // Covered by part2
   }
@@ -57,17 +59,20 @@ object Day10 : AoCDay<Grid<Space>> {
     val innerBorder = getInnerBorder(loop, isClockwise)
 
     graphSearch(
-        strategy = BREADTH_FIRST,
-        starts = innerBorder,
-        getNextNodes = { pos ->
-          orthogonals.map { pos + it }.filter { grid.inBounds(it) }.filter { it !in loop }
-        },
-        onVisit = { pos, _ ->
-          enclosed += pos
-          CONTINUE
-        })
+      strategy = BREADTH_FIRST,
+      starts = innerBorder,
+      getNextNodes = { pos ->
+        orthogonals.map { pos + it }.filter { grid.inBounds(it) }.filter { it !in loop }
+      },
+      onVisit = { pos, _ ->
+        enclosed += pos
+        CONTINUE
+      }
+    )
 
-    prettyPrint(grid, loop.toSet(), enclosed.toSet())
+    if (PRETTY_PRINT) {
+      prettyPrint(grid, loop.toSet(), enclosed.toSet())
+    }
 
     val farthest = loop.size / 2
     farthest.inspect("farthest point (part 1 answer)") shouldBe 6886
@@ -89,27 +94,27 @@ object Day10 : AoCDay<Grid<Space>> {
     val loop = mutableListOf<Offset>()
     val start = findStartingPosition(grid).inspect("Start @")
     graphSearch(
-        strategy = DEPTH_FIRST,
-        starts = listOf(start),
-        getNextNodes = { pos ->
-          when (val space = grid[pos]) {
-            is Pipe -> listOf(pos + space.dirs.first, pos + space.dirs.second)
-            is Start -> {
-              orthogonals.mapNotNull { dir ->
-                if (hasExit(grid, pos + dir, dir.opposite)) {
-                  (pos + dir)
-                } else {
-                  null
-                }
+      strategy = DEPTH_FIRST,
+      starts = listOf(start),
+      getNextNodes = { pos ->
+        when (val space = grid[pos]) {
+          is Pipe -> listOf(pos + space.dirs.first, pos + space.dirs.second)
+          is Start -> {
+            orthogonals.mapNotNull { dir ->
+              if (hasExit(grid, pos + dir, dir.opposite)) {
+                (pos + dir)
+              } else {
+                null
               }
             }
-            is Blank -> emptyList()
-          }.filter { grid.inBounds(it) }
-        },
-        onVisit = { pos, _ ->
-          loop += pos
-          CONTINUE
-        },
+          }
+          is Blank -> emptyList()
+        }.filter { grid.inBounds(it) }
+      },
+      onVisit = { pos, _ ->
+        loop += pos
+        CONTINUE
+      },
     )
     return loop
   }
@@ -122,23 +127,23 @@ object Day10 : AoCDay<Grid<Space>> {
   /** return all positions that are immediately "to the right of" loop (or to the left, if ccw) */
   private fun getInnerBorder(loop: List<Offset>, isClockwise: Boolean): List<Offset> {
     return loop
-        .windowed(3, 1) { (a, b, c) ->
-          // centered on b
-          val incomingDir = (b - a).toOrthogonal()
-          val outgoingDir = (c - b).toOrthogonal()
+      .windowed(3, 1) { (a, b, c) ->
+        // centered on b
+        val incomingDir = (b - a).toOrthogonal()
+        val outgoingDir = (c - b).toOrthogonal()
 
-          val dirs =
-              when {
-                incomingDir == outgoingDir -> listOf(incomingDir.rotate90(isClockwise))
-                incomingDir.rotate90(!isClockwise) == outgoingDir ->
-                    listOf(incomingDir, incomingDir.rotate90(isClockwise))
-                else -> emptyList()
-              }
+        val dirs =
+          when {
+            incomingDir == outgoingDir -> listOf(incomingDir.rotate90(isClockwise))
+            incomingDir.rotate90(!isClockwise) == outgoingDir ->
+              listOf(incomingDir, incomingDir.rotate90(isClockwise))
+            else -> emptyList()
+          }
 
-          dirs.map { b + it }
-        }
-        .flatten()
-        .filterNot { it in loop }
+        dirs.map { b + it }
+      }
+      .flatten()
+      .filterNot { it in loop }
   }
 
   private fun isClockwise(path: List<Offset>): Boolean {
@@ -185,16 +190,16 @@ fun Space.pretty(): String {
 
 fun prettyPrint(grid: Grid<Space>, loop: Set<Offset>, enclosed: Set<Offset>) {
   val prettyGrid =
-      grid.mapIndexed { y, row ->
-        row.mapIndexed { x, space ->
-          if (Offset(x, y) in enclosed) {
-            space.pretty().colorized(ANSI_BRIGHT_BLUE)
-          } else if (Offset(x, y) in loop) {
-            space.pretty().colorized(ANSI_BRIGHT_GREEN)
-          } else {
-            "   "
-          }
+    grid.mapIndexed { y, row ->
+      row.mapIndexed { x, space ->
+        if (Offset(x, y) in enclosed) {
+          space.pretty().colorized(ANSI_BRIGHT_BLUE)
+        } else if (Offset(x, y) in loop) {
+          space.pretty().colorized(ANSI_BRIGHT_GREEN)
+        } else {
+          "   "
         }
       }
+    }
   prettyGrid.forEach { row -> println(row.joinToString("")) }
 }

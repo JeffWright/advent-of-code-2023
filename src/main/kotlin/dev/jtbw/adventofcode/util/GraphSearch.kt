@@ -21,15 +21,15 @@ enum class ShouldContinue {
 }
 
 data class SearchMeta<POSITION : Any>(
-    val visited: MutableSet<POSITION> = mutableSetOf(),
+  val visited: MutableSet<POSITION> = mutableSetOf(),
 )
 
 fun <POSITION : Any> graphSearch(
-    strategy: SearchStrategy,
-    starts: List<POSITION>,
-    getNextNodes: (POSITION) -> List<POSITION>,
-    onVisit: SearchMeta<POSITION>.(position: POSITION, path: List<POSITION>) -> ShouldContinue,
-    preventRevisits: Boolean = true
+  strategy: SearchStrategy,
+  starts: List<POSITION>,
+  getNextNodes: (POSITION) -> List<POSITION>,
+  onVisit: SearchMeta<POSITION>.(position: POSITION, path: List<POSITION>) -> ShouldContinue,
+  preventRevisits: Boolean = true
 ) {
 
   val nodeDeque: ArrayDeque<List<POSITION>> = ArrayDeque()
@@ -50,9 +50,10 @@ fun <POSITION : Any> graphSearch(
 
     // Look for nodes reachable from this one
     val adjacents = getNextNodes(node)
-    val meta = SearchMeta(
-      visited = visited,
-    )
+    val meta =
+      SearchMeta(
+        visited = visited,
+      )
 
     // Visit this node
     when (meta.onVisit(node, pathInclusive)) {

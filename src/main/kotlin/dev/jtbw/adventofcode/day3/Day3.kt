@@ -25,8 +25,9 @@ object Day3 : AoCDay<GridWithMeta> {
   override val parser = Parser { lines ->
     val grid: Grid<Char> = lines.map { it.toCharArray().toList() }
     GridWithMeta(
-        grid = grid,
-        consumed = (0..(grid.height)).map { (0..grid.width).map { false }.toMutableList() })
+      grid = grid,
+      consumed = (0..(grid.height)).map { (0..grid.width).map { false }.toMutableList() }
+    )
   }
 
   override fun part1() {
@@ -71,15 +72,15 @@ object Day3 : AoCDay<GridWithMeta> {
             // .inspect("from $offset")
           }
           sum +=
-              parts.filterNotNull().let {
-                if (it.size == 2) {
-                  log("is gear! ${it[0]} * ${it[1]}")
-                  it[0] * it[1]
-                } else {
-                  log("not gear (${it.size})")
-                  0
-                }
+            parts.filterNotNull().let {
+              if (it.size == 2) {
+                log("is gear! ${it[0]} * ${it[1]}")
+                it[0] * it[1]
+              } else {
+                log("not gear (${it.size})")
+                0
               }
+            }
           grid.consumed.reset()
           parts.clear()
         }
@@ -110,17 +111,18 @@ private fun List<MutableList<Boolean>>.reset() {
   forEach { row -> row.indices.forEach { row[it] = false } }
 }
 
-//typealias Grid = List<List<Char>>
+// typealias Grid = List<List<Char>>
 
 data class GridWithMeta(
-    val grid: Grid<Char>,
-    val consumed: MutableGrid<Boolean>,
+  val grid: Grid<Char>,
+  val consumed: MutableGrid<Boolean>,
 )
 
 private val Char.isSymbol: Boolean
   get() {
     return this != '.' && !this.isDigit()
   }
+
 fun GridWithMeta.consume(x: Int, y: Int): Int? {
   // log("consume $x, $y")
 
@@ -137,10 +139,10 @@ fun GridWithMeta.consume(x: Int, y: Int): Int? {
   }
 
   val start =
-      x.downTo(Int.MIN_VALUE).first { x ->
-        // grid[x, y].inspect("$x, $y")
-        !grid.inBounds(x, y) || !grid[x, y].isDigit()
-      } + 1
+    x.downTo(Int.MIN_VALUE).first { x ->
+      // grid[x, y].inspect("$x, $y")
+      !grid.inBounds(x, y) || !grid[x, y].isDigit()
+    } + 1
 
   val end = (x..Int.MAX_VALUE).first { x -> !grid.inBounds(x, y) || !grid[x, y].isDigit() } - 1
 

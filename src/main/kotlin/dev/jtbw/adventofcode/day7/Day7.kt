@@ -33,7 +33,7 @@ object Day7 : AoCDay<List<Day7.Hand>> {
         cardsMap.values.any { it.size == 5 } -> HandType.FiveOfAKind
         cardsMap.values.any { it.size == 4 } -> HandType.FourOfAKind
         cardsMap.values.any { it.size == 3 } && cardsMap.values.any { it.size == 2 } ->
-            HandType.FullHouse
+          HandType.FullHouse
         cardsMap.values.any { it.size == 3 } -> HandType.ThreeOfAKind
         cardsMap.values.count { it.size == 2 } == 2 -> HandType.TwoPair
         cardsMap.values.any { it.size == 2 } -> HandType.OnePair
@@ -109,19 +109,19 @@ object Day7 : AoCDay<List<Day7.Hand>> {
   override fun part1() {
     val CORRECT = 247815719
     parseInput()
-        .sortedWith(typeComparator.then(TieBreakComparator(jokers = false)))
-        .foldIndexed(0) { index, acc, hand -> acc + (hand.bid * (index + 1)) }
-        .inspect("result")
-        .shouldBe(CORRECT)
+      .sortedWith(typeComparator.then(TieBreakComparator(jokers = false)))
+      .foldIndexed(0) { index, acc, hand -> acc + (hand.bid * (index + 1)) }
+      .inspect("result")
+      .shouldBe(CORRECT)
   }
 
   override fun part2() {
     val CORRECT = 248747492
     parseInput()
-        .map { it.copy(useJokers = true) }
-        .sortedWith(typeComparator.then(TieBreakComparator(jokers = true)))
-        .foldIndexed(0) { index, acc, hand -> acc + (hand.bid * (index + 1)) }
-        .inspect("result")
-        .shouldBe(CORRECT)
+      .map { it.copy(useJokers = true) }
+      .sortedWith(typeComparator.then(TieBreakComparator(jokers = true)))
+      .foldIndexed(0) { index, acc, hand -> acc + (hand.bid * (index + 1)) }
+      .inspect("result")
+      .shouldBe(CORRECT)
   }
 }

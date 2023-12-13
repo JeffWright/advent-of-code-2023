@@ -27,13 +27,12 @@ sealed interface Direction {
 
 val Direction.Orthogonal.opposite: Direction.Orthogonal
   get() =
-      when (this) {
-        DOWN -> UP
-        LEFT -> RIGHT
-        RIGHT -> LEFT
-        UP -> DOWN
-      }
-
+    when (this) {
+      DOWN -> UP
+      LEFT -> RIGHT
+      RIGHT -> LEFT
+      UP -> DOWN
+    }
 
 val Direction.offset: Offset
   get() {
@@ -50,20 +49,20 @@ val Direction.offset: Offset
   }
 
 fun Direction.Orthogonal.rotateLeft() =
-    when (this) {
-      UP -> LEFT
-      LEFT -> DOWN
-      DOWN -> RIGHT
-      RIGHT -> UP
-    }
+  when (this) {
+    UP -> LEFT
+    LEFT -> DOWN
+    DOWN -> RIGHT
+    RIGHT -> UP
+  }
 
 fun Direction.Orthogonal.rotateRight() =
-    when (this) {
-      UP -> RIGHT
-      RIGHT -> DOWN
-      DOWN -> LEFT
-      LEFT -> UP
-    }
+  when (this) {
+    UP -> RIGHT
+    RIGHT -> DOWN
+    DOWN -> LEFT
+    LEFT -> UP
+  }
 
 fun Direction.Orthogonal.rotate90(clockwise: Boolean) =
-    if (clockwise) rotateRight() else rotateLeft()
+  if (clockwise) rotateRight() else rotateLeft()

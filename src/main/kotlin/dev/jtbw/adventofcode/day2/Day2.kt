@@ -17,8 +17,9 @@ object Day2 : AoCDay<List<Game>> {
   override val parser = Parser { lines ->
     lines.map {
       Game(
-          id = it.substringBefore(":").match(Regex("""(\d+)""")).toInt(),
-          plays = it.substringAfter(":").toPlays())
+        id = it.substringBefore(":").match(Regex("""(\d+)""")).toInt(),
+        plays = it.substringAfter(":").toPlays()
+      )
     }
   }
 
@@ -39,9 +40,9 @@ fun String.toPlays(): List<Play> {
   val reRed = Regex("""(\d+) red""")
   return split(";").map {
     Play(
-        green = it.matchOrNull(reGreen)?.toInt() ?: 0,
-        blue = it.matchOrNull(reBlue)?.toInt() ?: 0,
-        red = it.matchOrNull(reRed)?.toInt() ?: 0,
+      green = it.matchOrNull(reGreen)?.toInt() ?: 0,
+      blue = it.matchOrNull(reBlue)?.toInt() ?: 0,
+      red = it.matchOrNull(reRed)?.toInt() ?: 0,
     )
   }
 }

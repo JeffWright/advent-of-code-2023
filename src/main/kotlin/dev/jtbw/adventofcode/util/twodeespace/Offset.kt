@@ -19,4 +19,3 @@ operator fun Offset.plus(direction: Direction) = plus(direction.offset)
 fun Offset.toOrthogonal() = Direction.orthogonals.first { it.offset == this }
 
 fun Offset.toDirection() = Direction.all.first { it.offset == this }
-

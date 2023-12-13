@@ -21,7 +21,7 @@ object Day6 : AoCDay<List<Day6.Race>> {
     val (timesLine, distanceLine) = lines
     val times = timesLine.substringAfter(":").trim().split(Regex("""\s+""")).map(String::toLong)
     val distances =
-        distanceLine.substringAfter(":").trim().split(Regex("""\s+""")).map(String::toLong)
+      distanceLine.substringAfter(":").trim().split(Regex("""\s+""")).map(String::toLong)
     times.zip(distances) { t, d -> Race(t, d) }
   }
 
@@ -51,9 +51,9 @@ object Day6 : AoCDay<List<Day6.Race>> {
   override fun example() {
     val CORRECT = 4 * 8 * 9L
     parseInput(filename = "Day6ex.txt")
-        .inspect()
-        .map { it.waysToBeat() }
-        .fold(1, Long::times) shouldBe CORRECT
+      .inspect()
+      .map { it.waysToBeat() }
+      .fold(1, Long::times) shouldBe CORRECT
   }
 
   override fun part1() {
@@ -64,8 +64,8 @@ object Day6 : AoCDay<List<Day6.Race>> {
   override fun part2() {
     val CORRECT = 35349468L
     parseInput(parser = parserVariant)
-        .inspect()
-        .map { it.waysToBeat() }
-        .fold(1, Long::times) shouldBe CORRECT
+      .inspect()
+      .map { it.waysToBeat() }
+      .fold(1, Long::times) shouldBe CORRECT
   }
 }

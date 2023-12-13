@@ -23,21 +23,23 @@ object Day5 : AoCDay<Day5.Input> {
 
   override val parser = Parser { lines ->
     lines
-        .filterNot { it.isBlank() }
-        .split(PREPEND) { it.contains("map:") }
-        .let {
-          val seeds = it.first().single().match(Regex("seeds: (.*)")).split(" ").map(String::toLong)
+      .filterNot { it.isBlank() }
+      .split(PREPEND) { it.contains("map:") }
+      .let {
+        val seeds = it.first().single().match(Regex("seeds: (.*)")).split(" ").map(String::toLong)
 
-          val maps =
-              it.drop(1) // drop 'seeds:'
-                  .map { section ->
-                    ConcreteMapping.parse(
-                        // First line is "x-to-y map:"
-                        description = section.first(),
-                        lines = section.drop(1).map { it.splitWhitespace().toLongs() })
-                  }
-          Input(seeds, maps)
-        }
+        val maps =
+          it
+            .drop(1) // drop 'seeds:'
+            .map { section ->
+              ConcreteMapping.parse(
+                // First line is "x-to-y map:"
+                description = section.first(),
+                lines = section.drop(1).map { it.splitWhitespace().toLongs() }
+              )
+            }
+        Input(seeds, maps)
+      }
   }
 
   override fun part1() {
@@ -50,7 +52,7 @@ object Day5 : AoCDay<Day5.Input> {
     val CORRECT = 2_008_785L
     val (seeds, maps) = parseInput()
     solve(seeds.windowed(2, 2).map { (start, length) -> start ..< (start + length) }, maps)
-        .shouldBe(CORRECT)
+      .shouldBe(CORRECT)
   }
 
   private fun solve(seeds: List<LongRange>, maps: List<Mapping>): Long {
@@ -150,12 +152,13 @@ class ConcreteMapping(override val description: String, rangez: List<MappedRange
 
   companion object {
     fun parse(description: String, lines: List<List<Long>>) =
-        ConcreteMapping(
-            description,
-            lines.map {
-              val (outputStart, inputStart, length) = it
-              MappedRange(inputStart ..< (inputStart + length), outputStart)
-            })
+      ConcreteMapping(
+        description,
+        lines.map {
+          val (outputStart, inputStart, length) = it
+          MappedRange(inputStart ..< (inputStart + length), outputStart)
+        }
+      )
   }
 
   val ranges = rangez.sortedBy { it.inputRange.first }

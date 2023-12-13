@@ -14,7 +14,6 @@ import dev.jtbw.logsugar.logDivider
 import dev.jtbw.scriptutils.shouldBe
 import dev.jtbw.scriptutils.times
 
-
 fun main() = Day12.run()
 
 object Day12 : AoCDay<List<SpringRow>> {
@@ -27,10 +26,7 @@ object Day12 : AoCDay<List<SpringRow>> {
     }
   }
 
-  data class SpringRow(
-    val springs: String,
-    val groups: List<Int>
-  )
+  data class SpringRow(val springs: String, val groups: List<Int>)
 
   private const val UNKNOWN = '?'
   private const val SPRING = '#'
@@ -48,16 +44,13 @@ object Day12 : AoCDay<List<SpringRow>> {
     logDivider(weight = 5)
     input[5].inspect().numArrangements() shouldBe 10L
 
-    input.sumOf {
-      it.numArrangements()
-    } shouldBe 21L
+    input.sumOf { it.numArrangements() } shouldBe 21L
 
-    val unfolded = parseInput("Day12ex.txt")
-      .map { it.unfoldedForPart2() }
+    val unfolded = parseInput("Day12ex.txt").map { it.unfoldedForPart2() }
 
     unfolded.first().let {
       it.springs shouldBe "???.###????.###????.###????.###????.###"
-      it.groups shouldBe  "1,1,3,1,1,3,1,1,3,1,1,3,1,1,3".splitCommas().toInts()
+      it.groups shouldBe "1,1,3,1,1,3,1,1,3,1,1,3,1,1,3".splitCommas().toInts()
     }
 
     unfolded[0].numArrangements() shouldBe 1L
@@ -69,28 +62,19 @@ object Day12 : AoCDay<List<SpringRow>> {
   }
 
   override fun part1() {
-    parseInput().sumOf {
-      it.numArrangements()
-    }.inspect() shouldBe 6827L
+    parseInput().sumOf { it.numArrangements() }.inspect() shouldBe 6827L
   }
 
   override fun part2() {
-    parseInput()
-      .map {
-        it.unfoldedForPart2()
-      }.sumOf {
-        it.numArrangements()
-      }.inspect() shouldBe 1537505634471L
+    parseInput().map { it.unfoldedForPart2() }.sumOf { it.numArrangements() }.inspect() shouldBe
+      1537505634471L
   }
 
   private fun SpringRow.unfoldedForPart2(): SpringRow {
-    return copy(
-      springs = ((springs + UNKNOWN) * 5).dropLast(1),
-      groups = groups * 5
-    )
+    return copy(springs = ((springs + UNKNOWN) * 5).dropLast(1), groups = groups * 5)
   }
 
-  data class State (
+  data class State(
     val idx: Int,
     val groupInProgress: Boolean,
     val currentGroup: Int,
@@ -99,12 +83,8 @@ object Day12 : AoCDay<List<SpringRow>> {
   )
 
   private fun SpringRow.numArrangements(): Long {
-    val startingState = State(
-      idx = 0,
-      groupInProgress = false,
-      currentGroup = 0,
-      leftInGroup = groups[0]
-    )
+    val startingState =
+      State(idx = 0, groupInProgress = false, currentGroup = 0, leftInGroup = groups[0])
     return numArrangementsInner(startingState, mutableMapOf())
   }
 
@@ -122,11 +102,12 @@ object Day12 : AoCDay<List<SpringRow>> {
 
     val char = springs[state.idx]
 
-    val options = if (char == UNKNOWN) {
-      CONCRETES
-    } else {
-      listOf(char)
-    }
+    val options =
+      if (char == UNKNOWN) {
+        CONCRETES
+      } else {
+        listOf(char)
+      }
 
     return options.sumOf { option ->
       val nextState = state.nextState(option, this)
@@ -136,8 +117,7 @@ object Day12 : AoCDay<List<SpringRow>> {
           memo[nextState]!!
         }
         else -> {
-          numArrangementsInner(nextState, memo)
-            .also { memo [nextState] = it }
+          numArrangementsInner(nextState, memo).also { memo[nextState] = it }
         }
       }
     }
@@ -151,7 +131,7 @@ object Day12 : AoCDay<List<SpringRow>> {
         return if (groupInProgress && leftInGroup == 0) {
           // Group is supposed to end but doesn't
           null
-        } else if(leftInGroup==null) {
+        } else if (leftInGroup == null) {
           // There aren't supposed to be any more groups
           null
         } else {
@@ -163,13 +143,12 @@ object Day12 : AoCDay<List<SpringRow>> {
           )
         }
       }
-
       EMPTY -> {
         if (groupInProgress && leftInGroup != 0) {
           // Group wasn't supposed to end, but did
           return null
         }
-        if(groupInProgress) {
+        if (groupInProgress) {
           return this.copy(
             idx = idx + 1,
             groupInProgress = false,
@@ -186,8 +165,4 @@ object Day12 : AoCDay<List<SpringRow>> {
       else -> error("bad char $char")
     }
   }
-}
-
-private operator fun <E> MutableList<E>.set(resets: IntRange, value: E) {
-  resets.forEach { this[it] = value }
 }

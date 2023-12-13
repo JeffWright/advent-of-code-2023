@@ -1,8 +1,5 @@
 package dev.jtbw.adventofcode.util
 
-import dev.jtbw.scriptutils.shouldBe
-
-
 fun Iterable<String>.toLongs(): List<Long> = map { it.toLong() }
 
 fun Iterable<String>.toInts(): List<Int> = map { it.toInt() }
@@ -21,18 +18,14 @@ fun <T> Sequence<T>.repeatForever(): Sequence<T> {
 }
 
 /** Same as this..other or other..this, depending on which is larger */
-fun Int.ascendingRangeTo(other: Int) =
-if(other > this) {
-  this..other
-} else {
-  other..this
+fun Int.ascendingRangeTo(other: Int) = minOf(this, other)..maxOf(this, other)
+
+fun <T> List<T>.countOf(item: T): Int = count { it == item }
+
+private operator fun <E> MutableList<E>.set(indices: IntRange, value: E) {
+  indices.forEach { this[it] = value }
 }
 
-fun <T> List<T>.countOf(item: T): Int {
-  return count { it == item }
-}
-
-fun main() {
-  "one, two  ,  three,    four    ,five".splitCommas() shouldBe
-      listOf("one", "two", "three", "four", "five")
+private operator fun <E> MutableList<E>.set(indices: Iterable<Int>, value: E) {
+  indices.forEach { this[it] = value }
 }

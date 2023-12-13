@@ -17,10 +17,10 @@ object Day4 : AoCDay<List<Day4.Card>> {
     lines.map {
       Regex("""Card +(\d+):(.*)\|(.*)""").matchEntire(it)!!.let {
         Card(
-            id = it.groupValues[1].toInt(),
-            winningNumbers =
-                it.groupValues[2].split(" ").filterNot { it.isBlank() }.map { it.toInt() },
-            numbers = it.groupValues[3].split(" ").filterNot { it.isBlank() }.map { it.toInt() },
+          id = it.groupValues[1].toInt(),
+          winningNumbers =
+            it.groupValues[2].split(" ").filterNot { it.isBlank() }.map { it.toInt() },
+          numbers = it.groupValues[3].split(" ").filterNot { it.isBlank() }.map { it.toInt() },
         )
       }
     }
