@@ -12,7 +12,7 @@ import dev.jtbw.scriptutils.PWD
 import dev.jtbw.scriptutils.div
 import dev.jtbw.scriptutils.invoke
 import dev.jtbw.scriptutils.match
-import dev.jtbw.scriptutils.stdout
+import dev.jtbw.scriptutils.stdoutString
 import dev.jtbw.scriptutils.times
 import dev.jtbw.scriptutils.waitForOk
 import java.io.File
@@ -59,11 +59,17 @@ fun download(file: File) {
 fun submitAnswer(day: Int, part: Int, answer: Number) {
   val aocSessionToken = (inputsDirectory / "session_token.txt").readText().trim()
   log("Submitting answer for Day $day Part $part: $answer...")
-  val success =
-    "curl -H \"Cookie: session=$aocSessionToken\" -H \"Content-Type: application/x-www-form-urlencoded\" https://adventofcode.com/2023/day/$day/answer -d 'level=$part&answer=$answer' -i"()
+  val html =
+    "curl -H \"Cookie: session=$aocSessionToken\" -H \"Content-Type: application/x-www-form-urlencoded\" https://adventofcode.com/2023/day/$day/answer -d 'level=$part&answer=$answer' -i"(
+        printCommand = true
+      )
       .waitForOk(true)
-      .stdout
-      .contains("That's the right answer!")
+      .stdoutString
+
+  log(html)
+
+  val success = html.contains("That's the right answer!")
+  val tooHigh = html.contains("too high")
 
   val w = 60
   val color = if (success) ANSI_BRIGHT_GREEN else ANSI_BRIGHT_RED

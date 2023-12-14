@@ -34,6 +34,12 @@ val Direction.Orthogonal.opposite: Direction.Orthogonal
       UP -> DOWN
     }
 
+val Direction.Orthogonal.isHorizontal: Boolean
+  get() = this == LEFT || this == RIGHT
+
+val Direction.Orthogonal.isVertical: Boolean
+  get() = this == UP || this == DOWN
+
 val Direction.offset: Offset
   get() {
     return when (this) {

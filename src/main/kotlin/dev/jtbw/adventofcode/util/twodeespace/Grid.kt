@@ -37,6 +37,31 @@ fun <T> Grid<T>.toMultilineString(transform: (T) -> String = { it.toString() }):
   return joinToString("\n") { it.joinToString("", transform = transform) }
 }
 
-fun <T> Grid<T>.forEachWithOffset(action: (Offset, T) -> Unit) {
-  forEachIndexed { y, row -> row.forEachIndexed { x, t -> action(Offset(x, y), t) } }
+/** @param byColumn: if true, (0, 0), (0, 1), (0, 2) ... (1, 0) */
+fun <T> Grid<T>.forEachWithOffset(byColumn: Boolean = false, action: (Offset, T) -> Unit) {
+  if (byColumn) {
+    (0 ..< width).forEach { x -> (0 ..< height).forEach { y -> action(Offset(x, y), this[x, y]) } }
+  } else {
+    (0 ..< height).forEach { y -> (0 ..< width).forEach { x -> action(Offset(x, y), this[x, y]) } }
+  }
+}
+
+/** @param byColumn if true, (0, 0), (0, 1), (0, 2) ... (1, 0) */
+fun <T> Grid<T>.asSequenceWithOffset(byColumn: Boolean = false): Sequence<Pair<Offset, T>> {
+  val grid = this
+  return sequence {
+    if (byColumn) {
+      (0 ..< width).forEach { x ->
+        (0 ..< height).forEach { y -> yield(Offset(x, y) to grid[x, y]) }
+      }
+    } else {
+      (0 ..< height).forEach { y ->
+        (0 ..< width).forEach { x -> yield(Offset(x, y) to grid[x, y]) }
+      }
+    }
+  }
+}
+
+fun <T> Grid<T>.toMutableGrid(): MutableGrid<T> {
+  return this as MutableGrid<T>
 }
