@@ -12,6 +12,7 @@ import dev.jtbw.scriptutils.PWD
 import dev.jtbw.scriptutils.div
 import dev.jtbw.scriptutils.invoke
 import dev.jtbw.scriptutils.match
+import dev.jtbw.scriptutils.stderrString
 import dev.jtbw.scriptutils.stdoutString
 import dev.jtbw.scriptutils.times
 import dev.jtbw.scriptutils.waitForOk
@@ -33,6 +34,12 @@ fun <INPUT> AoCDay<INPUT>.parseInput(
   filename: String? = null,
   parser: Parser<INPUT> = this.parser
 ): INPUT {
+  return parser.fn(parseInputRaw(filename).split("\n").dropLastWhile { it.isBlank() })
+}
+
+fun AoCDay<*>.parseInputRaw(
+  filename: String? = null,
+): String {
   val file =
     if (filename != null) {
       inputsDirectory / filename
@@ -45,7 +52,7 @@ fun <INPUT> AoCDay<INPUT>.parseInput(
       f
     }
 
-  return parser.fn(file.readLines())
+  return file.readText()
 }
 
 fun download(file: File) {
@@ -59,14 +66,16 @@ fun download(file: File) {
 fun submitAnswer(day: Int, part: Int, answer: Number) {
   val aocSessionToken = (inputsDirectory / "session_token.txt").readText().trim()
   log("Submitting answer for Day $day Part $part: $answer...")
-  val html =
-    "curl -H \"Cookie: session=$aocSessionToken\" -H \"Content-Type: application/x-www-form-urlencoded\" https://adventofcode.com/2023/day/$day/answer -d 'level=$part&answer=$answer' -i"(
+  // TODO JTW breaks on '' vs "" -- fix in lib
+  val (html, err) =
+    "curl -H \"Cookie: session=$aocSessionToken\" -H \"Content-Type: application/x-www-form-urlencoded\" https://adventofcode.com/2023/day/$day/answer -d \"level=$part&answer=$answer\" -i"(
         printCommand = true
       )
       .waitForOk(true)
-      .stdoutString
+      .let { it.stdoutString to it.stderrString }
 
   log(html)
+  log(err)
 
   val success = html.contains("That's the right answer!")
   val tooHigh = html.contains("too high")
