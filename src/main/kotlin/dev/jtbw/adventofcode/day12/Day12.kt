@@ -34,7 +34,7 @@ object Day12 : AoCDay<List<SpringRow>> {
   private val CONCRETES = listOf(SPRING, EMPTY)
 
   override fun tests() {
-    val input = parseInput("Day12ex.txt").inspect()
+    val input = parseInput("Day12ex.txt")
 
     input[0].numArrangements() shouldBe 1L
     input[1].numArrangements() shouldBe 4L

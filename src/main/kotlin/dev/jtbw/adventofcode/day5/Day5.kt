@@ -108,8 +108,11 @@ object Day5 : AoCDay<Day5.Input> {
 
 interface Mapping {
   val description: String
+
   fun get(input: Long): Long
+
   fun reverseGet(output: Long): Long
+
   fun breakpoints(): List<Long>
 }
 

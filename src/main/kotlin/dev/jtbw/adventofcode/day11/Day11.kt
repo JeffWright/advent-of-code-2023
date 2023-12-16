@@ -45,8 +45,8 @@ object Day11 : AoCDay<Grid<Space>> {
     val grid = parseInput(filename)
     grid.toMultilineString { it.char.toString() }
 
-    val emptyColumns = (0..grid.width).toMutableSet()
-    val emptyRows = (0..grid.width).toMutableSet()
+    val emptyColumns = (0L..grid.width).toMutableSet()
+    val emptyRows = (0L..grid.width).toMutableSet()
     val galaxies = mutableSetOf<Offset>()
     grid.forEachWithOffset { pos, space ->
       if (space == Galaxy) {

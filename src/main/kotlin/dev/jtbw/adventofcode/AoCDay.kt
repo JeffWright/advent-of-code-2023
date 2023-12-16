@@ -23,8 +23,11 @@ interface AoCDay<INPUT> {
   val parser: Parser<INPUT>
 
   fun example() {}
+
   fun part1() {}
+
   fun part2() {}
+
   fun tests() {}
 }
 
@@ -74,8 +77,8 @@ fun submitAnswer(day: Int, part: Int, answer: Number) {
       .waitForOk(true)
       .let { it.stdoutString to it.stderrString }
 
-  log(html)
-  log(err)
+  // log(html)
+  // log(err)
 
   val success = html.contains("That's the right answer!")
   val tooHigh = html.contains("too high")
@@ -101,17 +104,17 @@ fun <INPUT> AoCDay<INPUT>.run() {
   LogSugar.configure(useColors = true)
 
   val day = this
-  logDivider("AoC: ${day.javaClass.simpleName}")
-  logDivider("Tests", weight = 5)
+  logDivider("AoC: ${day.javaClass.simpleName}", weight = 5)
+  logDivider("Tests")
   day.tests()
   log("Tests Pass!")
 
-  logDivider("example()", weight = 5)
+  logDivider("example()")
   day.example()
 
-  logDivider("part1()", weight = 5)
+  logDivider("part1()")
   runTiming("part 1") { day.part1() }
 
-  logDivider("part2()", weight = 5)
+  logDivider("part2()")
   runTiming("part 2") { day.part2() }
 }

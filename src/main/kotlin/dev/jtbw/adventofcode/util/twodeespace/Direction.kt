@@ -1,20 +1,30 @@
 package dev.jtbw.adventofcode.util.twodeespace
 
+import dev.jtbw.adventofcode.util.twodeespace.Axis.HORIZONTAL
+import dev.jtbw.adventofcode.util.twodeespace.Axis.VERTICAL
+import dev.jtbw.adventofcode.util.twodeespace.Direction.Diagonal
 import dev.jtbw.adventofcode.util.twodeespace.Direction.Diagonal.*
+import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal
 import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.*
 
 sealed interface Direction {
   sealed interface Orthogonal : Direction {
     data object UP : Orthogonal
+
     data object DOWN : Orthogonal
+
     data object LEFT : Orthogonal
+
     data object RIGHT : Orthogonal
   }
 
   sealed interface Diagonal : Direction {
     data object UPLEFT : Diagonal
+
     data object UPRIGHT : Diagonal
+
     data object DOWNLEFT : Diagonal
+
     data object DOWNRIGHT : Diagonal
   }
 
@@ -70,5 +80,61 @@ fun Direction.Orthogonal.rotateRight() =
     LEFT -> UP
   }
 
+
 fun Direction.Orthogonal.rotate90(clockwise: Boolean) =
   if (clockwise) rotateRight() else rotateLeft()
+
+fun Direction.Diagonal.rotateRight() =
+  when (this) {
+    DOWNLEFT -> UPLEFT
+    UPLEFT -> UPRIGHT
+    UPRIGHT -> DOWNRIGHT
+    DOWNRIGHT -> DOWNLEFT
+  }
+
+fun Diagonal.rotateLeft() =
+  when (this) {
+    UPRIGHT -> UPLEFT
+    UPLEFT -> DOWNLEFT
+    DOWNLEFT -> DOWNRIGHT
+    DOWNRIGHT -> UPRIGHT
+  }
+
+fun Diagonal.rotate90(clockwise: Boolean) =
+  if (clockwise) rotateRight() else rotateLeft()
+
+enum class Axis {
+  HORIZONTAL,
+  VERTICAL
+}
+
+fun Diagonal.component(orth: Orthogonal) : Int {
+  return when(orth) {
+    UP -> offset.y * -1
+    DOWN -> offset.y
+    LEFT -> offset.x * -1
+    RIGHT -> offset.x
+  }
+}
+
+val Direction.Orthogonal.axis
+  get() =
+    when (this) {
+      LEFT,
+      RIGHT -> HORIZONTAL
+      UP,
+      DOWN -> VERTICAL
+    }
+
+fun Direction.toChar(): Char {
+  return when (this) {
+    DOWNLEFT -> TODO()
+    DOWNRIGHT -> TODO()
+    UPLEFT -> TODO()
+    UPRIGHT -> TODO()
+    DOWN -> '⇓'
+    LEFT -> '⇐'
+    RIGHT -> '⇒'
+    UP -> '⇑'
+  }
+}

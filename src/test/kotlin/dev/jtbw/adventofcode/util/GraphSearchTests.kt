@@ -1,19 +1,14 @@
 package dev.jtbw.adventofcode.util
 
 import dev.jtbw.adventofcode.util.SearchStrategy.*
-import dev.jtbw.adventofcode.util.ShouldContinue.*
-import dev.jtbw.adventofcode.util.twodeespace.Direction
-import dev.jtbw.adventofcode.util.twodeespace.Grid
-import dev.jtbw.adventofcode.util.twodeespace.Offset
-import dev.jtbw.adventofcode.util.twodeespace.get
-import dev.jtbw.adventofcode.util.twodeespace.inBounds
-import dev.jtbw.adventofcode.util.twodeespace.plus
+import dev.jtbw.logsugar.inspect
 import dev.jtbw.logsugar.log
-import dev.jtbw.logsugar.logDivider
+import dev.jtbw.logsugar.runTiming
 import dev.jtbw.scriptutils.shouldBe
 import org.junit.Test
 
 class SearchTests {
+  /*
   @Test
   fun testGraphSearch() {
     //
@@ -149,5 +144,100 @@ class SearchTests {
           9 * 6,
         )
         .sum()
+  }
+
+   */
+
+  @Test
+  fun breadthFirst() {
+    val order = mutableListOf<Int>()
+    val result = mutableListOf<ComputeStep<TreeNode>>()
+    runTiming {
+      traverse(
+        strategy = BREADTH_FIRST,
+        start = tree,
+        computeQueue = result,
+      ) { node ->
+        order += node.value
+        node.left?.let { search(it) }
+        node.right?.let { search(it) }
+      }
+    }
+
+    order shouldBe listOf(1, 2, 3, 4, 5, 6, 7)
+    result
+      .compute<TreeNode, Int> { node, children -> node.value + (children.maxOrNull() ?: 0) }
+      .get(tree)
+      .inspect() shouldBe (1 + 3 + 7)
+  }
+
+  @Test
+  fun depthFirst() {
+    val order = mutableListOf<Int>()
+    val result = mutableListOf<ComputeStep<TreeNode>>()
+    runTiming {
+      traverse(
+        strategy = DEPTH_FIRST,
+        start = tree,
+        computeQueue = result,
+      ) { node ->
+        order += node.value
+        node.left?.let { search(it) }
+        node.right?.let { search(it) }
+      }
+    }
+
+    order shouldBe listOf(1, 3, 7, 6, 2, 5, 4)
+    result
+      .compute<TreeNode, Int> { node, children ->
+        log("compute ${node.value} from $children")
+        node.value + (children.maxOrNull() ?: 0)
+      }[tree]
+      .inspect() shouldBe (1 + 3 + 7)
+  }
+
+  @Test
+  fun priorityFirst() {
+    val order = mutableListOf<Int>()
+    val result = mutableListOf<ComputeStep<TreeNode>>()
+    runTiming {
+      traverse(
+        strategy = DEPTH_FIRST,
+        start = tree,
+        computeQueue = result,
+      ) { node ->
+        order += node.value
+        node.left?.let { search(it, priority = it.value) }
+        node.right?.let { search(it, priority = it.value) }
+      }
+    }
+
+    order shouldBe listOf(1, 2, 3, 4, 5, 6, 7)
+    result
+      .compute<TreeNode, Int> { node, children ->
+        log("compute ${node.value} from $children")
+        node.value + (children.maxOrNull() ?: 0)
+      }[tree]
+      .inspect() shouldBe (1 + 3 + 7)
+  }
+
+  private val tree =
+    TreeNode(
+      1,
+      left =
+        TreeNode(
+          2,
+          left = TreeNode(4),
+          right = TreeNode(5),
+        ),
+      right = TreeNode(3, left = TreeNode(6), right = TreeNode(7))
+    )
+
+  data class TreeNode(
+    val value: Int,
+    val left: TreeNode? = null,
+    val right: TreeNode? = null,
+  ) {
+    override fun toString(): String = value.toString()
   }
 }

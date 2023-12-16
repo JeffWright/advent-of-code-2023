@@ -38,19 +38,15 @@ object Day4 : AoCDay<List<Day4.Card>> {
     val lastId = input.keys.max()
 
     fun addCard(idx: Int, count: Int) {
-      println("add $count copies of $idx")
       val pair = input[idx]!!
       input[idx] = pair.copy(first = pair.first + count)
     }
 
     (1..lastId).forEach { idx ->
-      println(idx)
       val numCards = input[idx]!!.first
       val points = input[idx]!!.second.matches()
       (1..points).forEach { addCard(idx + it, numCards) }
     }
-
-    input.inspect()
 
     input.values.sumOf { it.first }.inspect() shouldBe CORRECT
   }

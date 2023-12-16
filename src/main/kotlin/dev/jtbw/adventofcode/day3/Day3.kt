@@ -16,7 +16,6 @@ import dev.jtbw.adventofcode.util.twodeespace.plus
 import dev.jtbw.adventofcode.util.twodeespace.set
 import dev.jtbw.adventofcode.util.twodeespace.width
 import dev.jtbw.logsugar.inspect
-import dev.jtbw.logsugar.log
 import dev.jtbw.scriptutils.shouldBe
 
 fun main() = Day3.run()
@@ -38,20 +37,15 @@ object Day3 : AoCDay<GridWithMeta> {
     for (x in 0 ..< grid.grid.width) {
       for (y in 0 ..< grid.grid.height) {
         if (grid.grid[x, y].isSymbol) {
-          println("symbol @ $x, $y")
           Direction.all.forEach {
-            println(it)
             val offset = Offset(x, y) + it.offset
-            sum += grid.consume(offset.x, offset.y).inspect("from $offset") ?: 0
+            sum += grid.consume(offset.x, offset.y) ?: 0
           }
         }
       }
     }
 
-    grid.consumed.forEach { println(it.map { if (it) 'C' else '.' }.joinToString("")) }
-
-    println("sum = $sum")
-    sum shouldBe CORRECT
+    sum.inspect().shouldBe(CORRECT)
   }
 
   override fun part2() {
@@ -64,9 +58,7 @@ object Day3 : AoCDay<GridWithMeta> {
     for (x in 0 ..< grid.grid.width) {
       for (y in 0 ..< grid.grid.height) {
         if (grid.grid[x, y] == '*') {
-          println("gear @ $x, $y")
           Direction.all.forEach {
-            // println(it)
             val offset = Offset(x, y) + it.offset
             parts += grid.consume(offset.x, offset.y)
             // .inspect("from $offset")
@@ -74,10 +66,8 @@ object Day3 : AoCDay<GridWithMeta> {
           sum +=
             parts.filterNotNull().let {
               if (it.size == 2) {
-                log("is gear! ${it[0]} * ${it[1]}")
                 it[0] * it[1]
               } else {
-                log("not gear (${it.size})")
                 0
               }
             }
@@ -87,8 +77,7 @@ object Day3 : AoCDay<GridWithMeta> {
       }
     }
 
-    println("sum = $sum")
-    sum shouldBe CORRECT
+    sum.inspect() shouldBe CORRECT
   }
 
   override fun tests() {

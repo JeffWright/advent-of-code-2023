@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm") version "1.9.21"
     application
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("com.ncorti.ktfmt.gradle") version "0.11.0"
+    id("com.ncorti.ktfmt.gradle") version "0.15.1"
 }
 
 

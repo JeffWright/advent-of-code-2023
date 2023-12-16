@@ -15,13 +15,11 @@ object Day9 : AoCDay<List<List<Int>>> {
   override val parser = Parser { it.map { it.splitWhitespace().toInts() } }
 
   override fun part1() {
-    val CORRECT = 1992273652
-    parseInput().sumOf { it.next() }.inspect().shouldBe(CORRECT)
+    parseInput().sumOf { it.next() }.inspect().shouldBe(1992273652)
   }
 
   override fun part2() {
-    val CORRECT = 1012
-    parseInput().sumOf { it.prev() }.inspect().shouldBe(CORRECT)
+    parseInput().sumOf { it.prev() }.inspect().shouldBe(1012)
   }
 
   private fun List<Int>.next(): Int {

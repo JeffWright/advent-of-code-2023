@@ -65,3 +65,5 @@ fun <T> Grid<T>.asSequenceWithOffset(byColumn: Boolean = false): Sequence<Pair<O
 fun <T> Grid<T>.toMutableGrid(): MutableGrid<T> {
   return this as MutableGrid<T>
 }
+
+fun <T> Grid<T>.copy(): Grid<T> = map { row -> row.toList() }

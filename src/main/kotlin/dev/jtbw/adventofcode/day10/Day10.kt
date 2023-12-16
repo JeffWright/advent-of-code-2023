@@ -7,8 +7,8 @@ import dev.jtbw.adventofcode.parseInput
 import dev.jtbw.adventofcode.run
 import dev.jtbw.adventofcode.util.SearchStrategy.BREADTH_FIRST
 import dev.jtbw.adventofcode.util.SearchStrategy.DEPTH_FIRST
-import dev.jtbw.adventofcode.util.ShouldContinue.CONTINUE
-import dev.jtbw.adventofcode.util.graphSearch
+import dev.jtbw.adventofcode.util.traverse
+import dev.jtbw.adventofcode.util.traverseMultiStart
 import dev.jtbw.adventofcode.util.twodeespace.Direction.Companion.orthogonals
 import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal
 import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.*
@@ -27,6 +27,7 @@ import dev.jtbw.logsugar.ANSI_BRIGHT_BLUE
 import dev.jtbw.logsugar.ANSI_BRIGHT_GREEN
 import dev.jtbw.logsugar.colorized
 import dev.jtbw.logsugar.inspect
+import dev.jtbw.logsugar.log
 import dev.jtbw.scriptutils.shouldBe
 
 fun main() = Day10.run()
@@ -58,25 +59,26 @@ object Day10 : AoCDay<Grid<Space>> {
     val isClockwise = isClockwise(loop)
     val innerBorder = getInnerBorder(loop, isClockwise)
 
-    graphSearch(
-      strategy = BREADTH_FIRST,
-      starts = innerBorder,
-      getNextNodes = { pos ->
-        orthogonals.map { pos + it }.filter { grid.inBounds(it) }.filter { it !in loop }
-      },
-      onVisit = { pos, _ ->
-        enclosed += pos
-        CONTINUE
+    traverseMultiStart<Offset>(BREADTH_FIRST, starts = innerBorder) { pos ->
+      enclosed += pos
+      orthogonals.forEach {
+        (pos + it).let {
+          if (grid.inBounds(it) && it !in loop) {
+            search(it)
+          }
+        }
       }
-    )
+    }
 
     if (PRETTY_PRINT) {
       prettyPrint(grid, loop.toSet(), enclosed.toSet())
     }
 
     val farthest = loop.size / 2
-    farthest.inspect("farthest point (part 1 answer)") shouldBe 6886
-    enclosed.size.inspect("number of enclosed spaces (part 2 answer)") shouldBe 371
+    log("farthest point (part 1 answer)")
+    farthest.inspect() shouldBe 6886
+    log("number of enclosed spaces (part 2 answer)")
+    enclosed.size.inspect() shouldBe 371
   }
 
   private fun findStartingPosition(grid: Grid<Space>): Offset {
@@ -93,29 +95,33 @@ object Day10 : AoCDay<Grid<Space>> {
   private fun findLoop(grid: Grid<Space>): MutableList<Offset> {
     val loop = mutableListOf<Offset>()
     val start = findStartingPosition(grid).inspect("Start @")
-    graphSearch(
-      strategy = DEPTH_FIRST,
-      starts = listOf(start),
-      getNextNodes = { pos ->
-        when (val space = grid[pos]) {
-          is Pipe -> listOf(pos + space.dirs.first, pos + space.dirs.second)
-          is Start -> {
-            orthogonals.mapNotNull { dir ->
-              if (hasExit(grid, pos + dir, dir.opposite)) {
-                (pos + dir)
-              } else {
-                null
+    traverse<Offset>(DEPTH_FIRST, start) { pos ->
+      loop += pos
+      when (val space = grid[pos]) {
+        is Pipe -> {
+          (pos + space.dirs.first).let {
+            if (grid.inBounds(it)) {
+              search(it)
+            }
+          }
+          (pos + space.dirs.second).let {
+            if (grid.inBounds(it)) {
+              search(it)
+            }
+          }
+        }
+        is Start -> {
+          orthogonals.forEach { dir ->
+            (pos + dir).let {
+              if (grid.inBounds(it) && hasExit(grid, it, dir.opposite)) {
+                search(it)
               }
             }
           }
-          is Blank -> emptyList()
-        }.filter { grid.inBounds(it) }
-      },
-      onVisit = { pos, _ ->
-        loop += pos
-        CONTINUE
-      },
-    )
+        }
+        is Blank -> {}
+      }
+    }
     return loop
   }
 
