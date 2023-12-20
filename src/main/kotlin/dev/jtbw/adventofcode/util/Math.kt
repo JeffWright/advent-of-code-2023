@@ -19,12 +19,17 @@ fun primeFactorization(x: Int): List<Int> {
   var curr = x
 
   while (curr != 1) {
+    var old = curr
     for (p in primes) {
       if (curr.rem(p) == 0) {
         curr /= p
         result += p
         break
       }
+    }
+    if(old == curr) {
+      result += curr
+      break
     }
   }
 
