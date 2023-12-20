@@ -39,7 +39,7 @@ object Day3 : AoCDay<GridWithMeta> {
         if (grid.grid[x, y].isSymbol) {
           Direction.all.forEach {
             val offset = Offset(x, y) + it.offset
-            sum += grid.consume(offset.x, offset.y) ?: 0
+            sum += grid.consume(offset.x.toInt(), offset.y.toInt()) ?: 0
           }
         }
       }
@@ -60,7 +60,7 @@ object Day3 : AoCDay<GridWithMeta> {
         if (grid.grid[x, y] == '*') {
           Direction.all.forEach {
             val offset = Offset(x, y) + it.offset
-            parts += grid.consume(offset.x, offset.y)
+            parts += grid.consume(offset.x.toInt(), offset.y.toInt())
             // .inspect("from $offset")
           }
           sum +=

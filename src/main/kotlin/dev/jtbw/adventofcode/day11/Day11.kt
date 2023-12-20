@@ -68,8 +68,8 @@ object Day11 : AoCDay<Grid<Space>> {
   private fun distance(
     from: Offset,
     to: Offset,
-    emptyColumns: Set<Int>,
-    emptyRows: Set<Int>,
+    emptyColumns: Set<Long>,
+    emptyRows: Set<Long>,
     expansionFactor: Long
   ): Long {
     val euclidean = abs(to.x - from.x) + abs(to.y - from.y).toLong()

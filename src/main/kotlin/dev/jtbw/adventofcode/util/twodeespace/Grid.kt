@@ -6,14 +6,14 @@ typealias MutableGrid<T> = List<MutableList<T>>
 
 operator fun <T> Grid<T>.get(x: Int, y: Int) = this[y][x]
 
-operator fun <T> Grid<T>.get(offset: Offset) = this[offset.y][offset.x]
+operator fun <T> Grid<T>.get(offset: Offset) = this[offset.y.toInt()][offset.x.toInt()]
 
 operator fun <T> MutableGrid<T>.set(x: Int, y: Int, v: T) {
   this[y][x] = v
 }
 
 operator fun <T> MutableGrid<T>.set(offset: Offset, v: T) {
-  this[offset.y][offset.x] = v
+  this[offset.y.toInt()][offset.x.toInt()] = v
 }
 
 val Grid<*>.width
@@ -23,6 +23,10 @@ val Grid<*>.height
 
 fun <T> Grid<T>.inBounds(x: Int, y: Int): Boolean {
   return y in indices && x in this[y].indices
+}
+
+fun <T> Grid<T>.inBounds(x: Long, y: Long): Boolean {
+  return y in indices && x in this[y.toInt()].indices
 }
 
 fun <T> Grid<T>.inBounds(offset: Offset): Boolean = inBounds(offset.x, offset.y)

@@ -4,10 +4,10 @@ import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.DOWN
 import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.LEFT
 import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.RIGHT
 import dev.jtbw.adventofcode.util.twodeespace.Direction.Orthogonal.UP
-import kotlin.math.abs
 
 data class Offset(val x: Long, val y: Long) {
-  constructor(x: Int, y: Int): this(x.toLong(), y.toLong())
+  constructor(x: Int, y: Int) : this(x.toLong(), y.toLong())
+
   override fun toString(): String {
     return "($x, $y)"
   }
@@ -31,18 +31,21 @@ fun Offset.toOrthogonal() = Direction.orthogonals.first { it.offset == this }
 
 fun Offset.toDirection() = Direction.all.first { it.offset == this }
 
-fun Offset.toUnit() = Offset(
-  x = when {
-    x > 0 -> 1
-    x < 0 -> -1
-    else -> 0
-  },
-  y = when {
-    y > 0 -> 1
-    y < 0 -> -1
-    else -> 0
-  }
-)
+fun Offset.toUnit() =
+  Offset(
+    x =
+      when {
+        x > 0 -> 1
+        x < 0 -> -1
+        else -> 0
+      },
+    y =
+      when {
+        y > 0 -> 1
+        y < 0 -> -1
+        else -> 0
+      }
+  )
 
 fun Offset.directionTo(other: Offset): Direction {
   when {

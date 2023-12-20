@@ -80,7 +80,6 @@ fun Direction.Orthogonal.rotateRight() =
     LEFT -> UP
   }
 
-
 fun Direction.Orthogonal.rotate90(clockwise: Boolean) =
   if (clockwise) rotateRight() else rotateLeft()
 
@@ -100,16 +99,15 @@ fun Diagonal.rotateLeft() =
     DOWNRIGHT -> UPRIGHT
   }
 
-fun Diagonal.rotate90(clockwise: Boolean) =
-  if (clockwise) rotateRight() else rotateLeft()
+fun Diagonal.rotate90(clockwise: Boolean) = if (clockwise) rotateRight() else rotateLeft()
 
 enum class Axis {
   HORIZONTAL,
   VERTICAL
 }
 
-fun Diagonal.component(orth: Orthogonal) : Int {
-  return when(orth) {
+fun Diagonal.component(orth: Orthogonal): Long {
+  return when (orth) {
     UP -> offset.y * -1
     DOWN -> offset.y
     LEFT -> offset.x * -1

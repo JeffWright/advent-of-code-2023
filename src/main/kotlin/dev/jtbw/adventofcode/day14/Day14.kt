@@ -52,7 +52,7 @@ object Day14 : AoCDay<Grid<Char>> {
         .withIndex()
         .iterator()
 
-    val sample = mutableListOf<IndexedValue<Int>>()
+    val sample = mutableListOf<IndexedValue<Long>>()
 
     // Detect a cycle of length at least 5
     val cycleLength: Int
@@ -110,10 +110,10 @@ object Day14 : AoCDay<Grid<Char>> {
     iterationOrder.forEach { offset ->
       val newRow =
         when (towards) {
-          DOWN -> offset.y == height - 1
-          LEFT -> offset.x == 0
-          RIGHT -> offset.x == width - 1
-          UP -> offset.y == 0
+          DOWN -> offset.y == height - 1L
+          LEFT -> offset.x == 0L
+          RIGHT -> offset.x == width - 1L
+          UP -> offset.y == 0L
         }
       if (newRow) {
         nextOpen = null
@@ -140,7 +140,7 @@ object Day14 : AoCDay<Grid<Char>> {
     }
   }
 
-  private fun Grid<Char>.totalLoad(): Int {
+  private fun Grid<Char>.totalLoad(): Long {
     return asSequenceWithOffset().sumOf { (offset, c) ->
       if (c == 'O') {
         // y is top-bottom
