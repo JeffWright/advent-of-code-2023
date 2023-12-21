@@ -27,7 +27,7 @@ fun primeFactorization(x: Int): List<Int> {
         break
       }
     }
-    if(old == curr) {
+    if (old == curr) {
       result += curr
       break
     }

@@ -9,7 +9,11 @@ import dev.jtbw.adventofcode.day14.Day14
 import dev.jtbw.adventofcode.day15.Day15
 import dev.jtbw.adventofcode.day16.Day16
 import dev.jtbw.adventofcode.day17.Day17
+import dev.jtbw.adventofcode.day18.Day18
+import dev.jtbw.adventofcode.day19.Day19
 import dev.jtbw.adventofcode.day2.Day2
+import dev.jtbw.adventofcode.day20.Day20
+import dev.jtbw.adventofcode.day21.Day21
 import dev.jtbw.adventofcode.day3.Day3
 import dev.jtbw.adventofcode.day4.Day4
 import dev.jtbw.adventofcode.day5.Day5
@@ -44,8 +48,10 @@ class MainTests {
           Day15,
           Day16,
           Day17,
-          // Day18,
-
+          Day18,
+          Day19,
+          Day20,
+          Day21,
         )
         .forEach { it.run() }
     }

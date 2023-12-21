@@ -46,3 +46,9 @@ fun shoelaceArea(v: List<Offset>): Double {
   require(v[0].x == v[n - 1].x || v[0].y == v[n - 1].y)
   return Math.abs(a + v[n - 1].x * v[0].y - v[0].x * v[n - 1].y) / 2.0
 }
+
+data class BinaryTree<T>(
+  var value: T,
+  var left: BinaryTree<T>? = null,
+  var right: BinaryTree<T>? = null,
+)
